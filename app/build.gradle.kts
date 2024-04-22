@@ -1,12 +1,18 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    with(libs.plugins) {
+        alias(com.android.application)
+        alias(org.jetbrains.kotlin.android)
+        alias(com.google.dagger.hilt.android)
+        alias(org.jetbrains.dokka)
+        alias(io.gitlab.arturbosch.detekt)
+        alias(org.jetbrains.kotlin.kapt)
+    }
 }
 
 android {
     namespace = "team.viceversa.template"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "team.viceversa.template"
@@ -31,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -52,19 +58,57 @@ android {
 
 dependencies {
 
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.compose.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
+    with(libs) {
+        dokkaPlugin(dokka)
+        detektPlugins(detekt.rules.compose)
+
+        val dependencies = listOf(
+            accompanist.permissions,
+            activity.compose,
+            coil.compose,
+            coil.svg,
+            compose.material3,
+            core.ktx,
+            datastore,
+            hilt.android,
+            hilt.navigation.compose,
+            kotlinx.collections.immutable,
+            lifecycle.runtime.ktx,
+            moshi,
+            navigation.compose,
+            platform(compose.bom),
+            retrofit,
+            room,
+            room.ktx,
+            ui,
+            ui.graphics,
+            ui.tooling.preview,
+        )
+
+        val kaptDependencies = listOf(
+            hilt.compiler,
+            room.compiler,
+        )
+
+        for (dependency in dependencies) {
+            implementation(dependency)
+        }
+
+        for (kaptDependency in kaptDependencies) {
+            kapt(kaptDependency)
+        }
+
+        androidTestImplementation(androidx.test.ext.junit)
+        androidTestImplementation(espresso.core)
+        androidTestImplementation(platform(compose.bom))
+        androidTestImplementation(ui.test.junit4)
+
+        debugImplementation(ui.test.manifest)
+        debugImplementation(ui.tooling)
+
+        testImplementation(junit)
+        testImplementation(kotlinx.coroutines.test)
+        testImplementation(mockk.agent)
+        testImplementation(mockk.android)
+    }
 }
