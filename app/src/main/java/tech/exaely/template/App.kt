@@ -1,4 +1,4 @@
-package team.viceversa.template
+package tech.exaely.template
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

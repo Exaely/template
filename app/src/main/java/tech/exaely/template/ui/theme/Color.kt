@@ -1,4 +1,4 @@
-package team.viceversa.template.ui.theme
+package tech.exaely.template.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

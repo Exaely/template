@@ -1,4 +1,4 @@
-package team.viceversa.template
+package tech.exaely.template
 
 import org.junit.Test
 

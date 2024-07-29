@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "team.viceversa.template"
+    namespace = "tech.exaely.template"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "team.viceversa.template"
+        applicationId = "tech.exaely.template"
         minSdk = 25
         targetSdk = 33
         versionCode = 1
@@ -62,7 +62,7 @@ dependencies {
         dokkaPlugin(dokka)
         detektPlugins(detekt.rules.compose)
 
-        val dependencies = listOf(
+        implementAll(
             accompanist.permissions,
             activity.compose,
             coil.compose,
@@ -85,18 +85,10 @@ dependencies {
             ui.tooling.preview,
         )
 
-        val kaptDependencies = listOf(
+        kaptAll(
             hilt.compiler,
             room.compiler,
         )
-
-        for (dependency in dependencies) {
-            implementation(dependency)
-        }
-
-        for (kaptDependency in kaptDependencies) {
-            kapt(kaptDependency)
-        }
 
         androidTestImplementation(androidx.test.ext.junit)
         androidTestImplementation(espresso.core)
@@ -110,5 +102,17 @@ dependencies {
         testImplementation(kotlinx.coroutines.test)
         testImplementation(mockk.agent)
         testImplementation(mockk.android)
+    }
+}
+
+fun DependencyHandler.implementAll(vararg dependencies: Any) {
+    for (dependency in dependencies) {
+        implementation(dependency)
+    }
+}
+
+fun DependencyHandler.kaptAll(vararg dependencies: Any) {
+    for (dependency in dependencies) {
+        implementation(dependency)
     }
 }
