@@ -113,6 +113,6 @@ fun DependencyHandler.implementAll(vararg dependencies: Any) {
 
 fun DependencyHandler.kaptAll(vararg dependencies: Any) {
     for (dependency in dependencies) {
-        implementation(dependency)
+        kapt(dependency)
     }
 }
